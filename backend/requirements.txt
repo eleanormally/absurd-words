@@ -1,0 +1,5 @@
+Flask
+gunicorn
+Flask-RESTful
+requests
+Flask-CORS
