@@ -49,7 +49,15 @@ class GetWordData(Resource):
             data = WordsAPIRequest(word)
             if type(data) == str:
                 return '{{error: {message}}}'.format(message=data)
-            calculateScore(data['perMil'], data['dLength'], data['sPerMil'])
+            score = calculateScore(data['perMil'], data['dLength'], data['sPerMil'])
+            return {
+                'score': score,
+                'datapoints': {
+                    'usesPerMillionWords': data['perMil'],
+                    'definitionLength': data['dLength'],
+                    'SynonymAverageUsesPerMillionWords': data['sPerMil']
+                }
+            }
         else:
             return '{message: "not in database"}'
 
