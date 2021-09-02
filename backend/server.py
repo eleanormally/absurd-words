@@ -78,7 +78,7 @@ def addWordToDatabase(data):
             conn.close()
 
 def CheckExistingWord(word):
-    connection = None
+    conn = None
 
     try:
         conn = psycopg2.connect(
