@@ -18,24 +18,32 @@ def WordsAPIRequest(word):
     key = os.environ['WORDSAPIKEY']
     headers['x-rapidapi-key'] = key
     response = requests.request('GET', url.format(word), headers=headers).json()
-    if 'success' in response and response['success'] == 'false':
+    if 'success' in response and response['success'] == False:
         return 'Error: ' + response['message']
     freqResponse = requests.request('GET', url.format(word) + '/frequency', headers=headers).json()
     defintionLength = len(response['results'][0]['definition'].split())
-    topSynonyms = response['results'][0]['synonyms']
-    # remove multi word synonyms
-    topSynonyms = [s for s in topSynonyms if len(s.split()) == 1]
-    perMil = float(freqResponse['frequency']['perMillion'])
-    averagePerMil = 0
-    if len(topSynonyms) > 0:
-        for s in topSynonyms:
-            sResponse = requests.request('GET', url.format(s) + '/frequency', headers=headers).json()
-            if 'success' in response and response['success'] == 'false':
-                return 'Synonym Error: ' + response['message']
-            averagePerMil += float(sResponse['frequency']['perMillion'])
-        averagePerMil /= len(topSynonyms)
+    if 'frequency' in freqResponse:
+        perMil = float(freqResponse['frequency']['perMillion'])
     else:
-        averagePerMil = perMil
+        perMil = 0.0001
+    averagePerMil = 0
+    if 'synonyms' in response['results'][0]:
+        topSynonyms = response['results'][0]['synonyms']    
+        # remove multi word synonyms
+        topSynonyms = [s for s in topSynonyms if len(s.split()) == 1 and s.isalpha()]
+        if len(topSynonyms) > 0:
+            for s in topSynonyms[:3]:
+                sResponse = requests.request('GET', url.format(s) + '/frequency', headers=headers).json()
+                if 'success' in response and response['success'] == 'false':
+                    return 'Synonym Error: ' + response['message']
+                print(sResponse)
+                if 'frequency' in sResponse:
+                    averagePerMil += float(sResponse['frequency']['perMillion'])
+            averagePerMil /= len(topSynonyms)
+        else:
+            averagePerMil = 1
+    else:
+        averagePerMil = 1
     return {
         'perMil': perMil,
         'dLength': defintionLength,
