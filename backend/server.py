@@ -55,7 +55,7 @@ def calculateScore(perMil, dLength, sPerMil):
     return sPerMil/(math.log(perMil+1)*dLength)
 
 def addWordToDatabase(data):
-    connection = None
+    conn = None
 
     try:
         conn = psycopg2.connect(
@@ -126,7 +126,7 @@ class GetWordData(Resource):
             }
             addWordToDatabase(calculatedResult)
             return calculatedResult
-            
+
         else:
             return '{message: "not in database"}'
 
