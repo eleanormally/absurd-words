@@ -65,7 +65,7 @@ def addWordToDatabase(data):
         cur = conn.cursor()
 
 
-        query = 'INSERT INTO words (word, score, datapoints) VALUES({},{},{})'''.format(data['word'], data['score'], data['datapoints'])'
+        query = 'INSERT INTO words (word, score, datapoints) VALUES({},{},{})'.format(data['word'], data['score'], data['datapoints'])
         cur.execute(
           query
         )
