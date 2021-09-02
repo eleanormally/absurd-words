@@ -66,7 +66,7 @@ def addWordToDatabase(data):
 
         cur.execute(
           '''INSERT INTO words (word, score, datapoints)
-          VALUES({},{},{})'.format(data['word'], data['score'], data['datapoints'])'''
+          VALUES({},{},{})'''.format(data['word'], data['score'], data['datapoints'])
         )
 
 
@@ -129,6 +129,7 @@ class GetWordData(Resource):
 
         else:
             return '{message: "not in database"}'
+
 
 api.add_resource(GetWordData, '/getWord/<word>')
 
