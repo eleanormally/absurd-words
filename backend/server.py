@@ -4,6 +4,7 @@ from flask_restful import Resource, Api, reqparse
 from flask_cors import CORS
 import os
 import math
+import psycopg2
 
 app = Flask(__name__)
 api = Api(app)
@@ -52,18 +53,70 @@ def WordsAPIRequest(word):
 
 def calculateScore(perMil, dLength, sPerMil):
     return sPerMil/(math.log(perMil+1)*dLength)
+
+def addWordToDatabase(data):
+    connection = None
+
+    try:
+        conn = psycopg2.connect(
+            os.environ('DATABASE_URL'),
+            sslmode='require'
+        )
+        cur = conn.cursor()
+
+        cur.execute(
+          'INSERT INTO words (word, score, datapoints) \\\
+          VALUES({},{},{})'.format(data['word'], data['score'], data['datapoints'])
+        )
+
+
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+
+    finally:
+        if conn is not None:
+            conn.close()
+
+def CheckExistingWord(word):
+    connection = None
+
+    try:
+        conn = psycopg2.connect(
+            os.environ('DATABASE_URL'),
+            sslmode='require'
+        )
+        cur = conn.cursor()
+
+        cur.execute(
+          'SELECT * FROM words WHERE word = {}'.format(word)
+        )
+
+        return cur.fetchone()
+
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+
+    finally:
+        if conn is not None:
+            conn.close()
+
 class GetWordData(Resource):
     def get(self, word):
         parser = reqparse.RequestParser()
         parser.add_argument('calculate', type=bool)
         args = parser.parse_args()
 
-        if args['calculate']:
+        valInDatabase = CheckExistingWord(word)
+        if valInDatabase is not None:
+          return valInDatabase
+
+        elif args['calculate']:
             data = WordsAPIRequest(word)
             if type(data) == str:
                 return '{{error: {message}}}'.format(message=data)
             score = calculateScore(data['perMil'], data['dLength'], data['sPerMil'])
-            return {
+            calculatedResult = {
+                'word': word,
                 'score': score,
                 'datapoints': {
                     'usesPerMillionWords': data['perMil'],
@@ -71,6 +124,9 @@ class GetWordData(Resource):
                     'SynonymAverageUsesPerMillionWords': data['sPerMil']
                 }
             }
+            addWordToDatabase(calculatedResult)
+            return calculatedResult
+            
         else:
             return '{message: "not in database"}'
 
