@@ -109,7 +109,7 @@ class GetWordData(Resource):
           return {
             'word': word,
             'score': valInDatabase[1],
-            'datapoints': json.loads(valInDatabase[2])
+            'datapoints': valInDatabase[2]
           }
 
         elif args['calculate']:
