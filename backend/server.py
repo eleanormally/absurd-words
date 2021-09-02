@@ -28,7 +28,7 @@ def WordsAPIRequest(word):
         perMil = float(freqResponse['frequency']['perMillion'])
     else:
         perMil = 0.0001
-    averagePerMil = 0
+    averagePerMil = 0.0001
     if 'synonyms' in response['results'][0]:
         topSynonyms = response['results'][0]['synonyms']
         # remove multi word synonyms
