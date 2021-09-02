@@ -64,9 +64,10 @@ def addWordToDatabase(data):
         )
         cur = conn.cursor()
 
+
+        query = 'INSERT INTO words (word, score, datapoints) VALUES({},{},{})'''.format(data['word'], data['score'], data['datapoints'])'
         cur.execute(
-          '''INSERT INTO words (word, score, datapoints)
-          VALUES({},{},{})'''.format(data['word'], data['score'], data['datapoints'])
+          query
         )
 
 
@@ -130,6 +131,11 @@ class GetWordData(Resource):
         else:
             return '{message: "not in database"}'
 
+class TopWords(Resource):
+    def get(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('sortBy', type=str)
+        parser.add_arg
 
 api.add_resource(GetWordData, '/getWord/<word>')
 
