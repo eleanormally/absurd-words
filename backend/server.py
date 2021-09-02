@@ -29,7 +29,7 @@ def WordsAPIRequest(word):
         perMil = 0.0001
     averagePerMil = 0
     if 'synonyms' in response['results'][0]:
-        topSynonyms = response['results'][0]['synonyms']    
+        topSynonyms = response['results'][0]['synonyms']
         # remove multi word synonyms
         topSynonyms = [s for s in topSynonyms if len(s.split()) == 1 and s.isalpha()]
         if len(topSynonyms) > 0:
@@ -88,7 +88,7 @@ def CheckExistingWord(word):
         cur = conn.cursor()
 
         cur.execute(
-          'SELECT * FROM words WHERE word = {}'.format(word)
+          'SELECT * FROM words WHERE word = \'{}\''.format(word)
         )
 
         return cur.fetchone()
