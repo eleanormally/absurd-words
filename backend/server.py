@@ -66,7 +66,7 @@ def addWordToDatabase(data):
 
 
         cur.execute('INSERT INTO words (word, score, datapoints) VALUES(%s, %s, %s)', (data['word'], data['score'], json.dumps(data['datapoints'])))
-        cur.commit()
+        conn.commit()
 
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
