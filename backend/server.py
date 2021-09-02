@@ -106,7 +106,11 @@ class GetWordData(Resource):
 
         valInDatabase = CheckExistingWord(word)
         if valInDatabase is not None:
-          return valInDatabase
+          return {
+            'word': word,
+            'score': valInDatabase[1],
+            'datapoints': json.loads(valInDatabase[2])
+          }
 
         elif args['calculate']:
             data = WordsAPIRequest(word)
