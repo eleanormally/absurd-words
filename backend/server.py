@@ -5,6 +5,7 @@ from flask_cors import CORS
 import os
 import math
 import psycopg2
+import json
 
 app = Flask(__name__)
 api = Api(app)
@@ -65,7 +66,7 @@ def addWordToDatabase(data):
         cur = conn.cursor()
 
 
-        query = 'INSERT INTO words (word, score, datapoints) VALUES({},{},{})'.format(data['word'], data['score'], data['datapoints'])
+        query = 'INSERT INTO words (word, score, datapoints) VALUES({},{},{})'.format(data['word'], data['score'], json.dumps(data['datapoints']))
         cur.execute(
           query
         )
