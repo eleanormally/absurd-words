@@ -59,7 +59,7 @@ def addWordToDatabase(data):
 
     try:
         conn = psycopg2.connect(
-            os.environ('DATABASE_URL'),
+            os.environ['DATABASE_URL'],
             sslmode='require'
         )
         cur = conn.cursor()
@@ -82,7 +82,7 @@ def CheckExistingWord(word):
 
     try:
         conn = psycopg2.connect(
-            os.environ('DATABASE_URL'),
+            os.environ['DATABASE_URL'],
             sslmode='require'
         )
         cur = conn.cursor()
