@@ -38,7 +38,6 @@ def WordsAPIRequest(word):
                 sResponse = requests.request('GET', url.format(s) + '/frequency', headers=headers).json()
                 if 'success' in response and response['success'] == 'false':
                     return 'Synonym Error: ' + response['message']
-                print(sResponse)
                 if 'frequency' in sResponse:
                     averagePerMil += float(sResponse['frequency']['perMillion'])
             averagePerMil /= len(topSynonyms)
@@ -66,11 +65,8 @@ def addWordToDatabase(data):
         cur = conn.cursor()
 
 
-        query = 'INSERT INTO words (word, score, datapoints) VALUES(\'{}\',{},\'{}\')'.format(data['word'], data['score'], json.dumps(data['datapoints']))
-        cur.execute(
-          query
-        )
-
+        cur.execute('INSERT INTO words (word, score, datapoints) VALUES(%s, %s, %s)', (data['word'], data['score'], json.dumps(data['datapoints'])))
+        cur.commit()
 
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
