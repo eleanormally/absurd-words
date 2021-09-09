@@ -145,7 +145,7 @@ def getTopWords(method, rNum, offset):
     'z-a': 'word desc',
     'humour': 'humour',
     'humourInverse': 'humour desc',
-    'util': 'utilization'
+    'util': 'utilization',
     'utilInverse': 'utilization desc'
   }
   sort = switcher.get(method, 'invalid')
