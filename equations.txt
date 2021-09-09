@@ -1,0 +1,15 @@
+full:
+-log(\frac{\sum f_i}{y} )*(1+\frac{\frac{\sum p_i*log_2(p_i)}{l}+q+ \frac{log(1+h_1) + \frac{1}{2}log(1+h_2)}{2}
+}{100})
+
+simplified: 
+u*(1+\frac{-h+q+\frac{a}{2}}{100})
+
+phonemic humour:
+-\frac{\sum p_i*log_2(p_i))}{l}
+
+word utilization:
+-log(\frac{\sum f_i}{y})
+
+relative word abundance:
+log(1+h_1)+\frac{1}{2}log(1+h_2)

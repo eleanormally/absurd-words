@@ -6,53 +6,64 @@ import os
 import math
 import psycopg2
 import json
+from nltk.corpus import wordnet as wn
+import nltk
 
 app = Flask(__name__)
 api = Api(app)
 CORS(app)
 
 
+def calculateWordScore(word):
+    
+    #Phonemic Humour
+    h = 0
+    with open('letter_freq.json', 'r') as file:
+      freq = json.loads(file.read())
+    for l in word:
+      h += freq[l]*math.log(freq[l], 2)
+    h /= -1*len(word)
 
-def WordsAPIRequest(word):
-    url = 'https://wordsapiv1.p.rapidapi.com/words/{}'
-    headers = {'x-rapidapi-host': 'wordsapiv1.p.rapidapi.com'}
+    #Word Utilization
+    freqResp = requests.get("https://books.google.com/ngrams/json?content={}&year_start=1990&year_end=2019&corpus=26&smoothing=3".format(word)).json()[0]
+    t = 0
+    for n in freqResp['timeseries']:
+      t += float(n)
+    t /= len(freqResp['timeseries'])
+    u = -math.log(t)
 
-    key = os.environ['WORDSAPIKEY']
-    headers['x-rapidapi-key'] = key
-    response = requests.request('GET', url.format(word), headers=headers).json()
-    if 'success' in response and response['success'] == False:
-        return 'Error: ' + response['message']
-    freqResponse = requests.request('GET', url.format(word) + '/frequency', headers=headers).json()
-    defintionLength = len(response['results'][0]['definition'].split())
-    if 'frequency' in freqResponse:
-        perMil = float(freqResponse['frequency']['perMillion'])
-    else:
-        perMil = 0.0001
-    averagePerMil = 0.0001
-    if 'synonyms' in response['results'][0]:
-        topSynonyms = response['results'][0]['synonyms']
-        # remove multi word synonyms
-        topSynonyms = [s for s in topSynonyms if len(s.split()) == 1 and s.isalpha()]
-        if len(topSynonyms) > 0:
-            for s in topSynonyms[:3]:
-                sResponse = requests.request('GET', url.format(s) + '/frequency', headers=headers).json()
-                if 'success' in response and response['success'] == 'false':
-                    return 'Synonym Error: ' + response['message']
-                if 'frequency' in sResponse:
-                    averagePerMil += float(sResponse['frequency']['perMillion'])
-            averagePerMil /= len(topSynonyms)
-        else:
-            averagePerMil = 1
-    else:
-        averagePerMil = 1
+    #Word Ambiguity
+    synsets = wn.synsets(word)
+    q = 0
+    for syn in synsets:
+      q += len(syn.lemmas())
+    
+    #Related Word Abundance
+
+    h1 = 0
+    h2 = 0
+    for syn in synsets:
+      hyponyms = syn.hyponyms()
+      h1 += len(hyponyms)
+      for nym in hyponyms:
+        h2 += len(nym.hyponyms())
+    
+    a = math.log(1+h1) + 0.5*math.log(1+h2)
+
+
+    score = u*(1+(q-h+0.5*a)/100)
+
     return {
-        'perMil': perMil,
-        'dLength': defintionLength,
-        'sPerMil': averagePerMil
+      'word': word,
+      'score': score,
+      'datapoints': {
+        'humour': h,
+        'ambiguity': q,
+        'relatives': a,
+        'utlilization': u
+      }
     }
 
-def calculateScore(perMil, dLength, sPerMil):
-    return sPerMil/(math.log(perMil+1)*dLength)
 
 def addWordToDatabase(data):
     conn = None
@@ -113,32 +124,51 @@ class GetWordData(Resource):
           }
 
         elif args['calculate']:
-            data = WordsAPIRequest(word)
-            if type(data) == str:
-                return '{{error: {message}}}'.format(message=data)
-            score = calculateScore(data['perMil'], data['dLength'], data['sPerMil'])
-            calculatedResult = {
-                'word': word,
-                'score': score,
-                'datapoints': {
-                    'usesPerMillionWords': data['perMil'],
-                    'definitionLength': data['dLength'],
-                    'SynonymAverageUsesPerMillionWords': data['sPerMil']
-                }
-            }
-            addWordToDatabase(calculatedResult)
-            return calculatedResult
+            synsets = wn.synsets(word)
+            if len(synsets) == 0:
+                return '{{error: word not found}'
+            calculatedData = calculateWordScore(word)
+            addWordToDatabase(calculatedData)
+            return calculatedData
 
         else:
             return '{message: "not in database"}'
 
-class TopWords(Resource):
-    def get(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument('sortBy', type=str)
-        parser.add_arg
+# def getTopWords(method, rNum, index):
+#   conn = None
+
+#     try:
+#         conn = psycopg2.connect(
+#             os.environ['DATABASE_URL'],
+#             sslmode='require'
+#         )
+#         cur = conn.cursor()
+
+#         cur.execute(
+#           'SELECT * FROM words WHERE word = \'{}\''.format(word)
+#         )
+
+#         return cur.fetchone()
+
+#     except (Exception, psycopg2.DatabaseError) as error:
+#         print(error)
+
+#     finally:
+#         if conn is not None:
+#             conn.close()
+
+# class TopWords(Resource):
+#     def get(self):
+#         parser = reqparse.RequestParser()
+#         parser.add_argument('sortMethod', type=str, default='score')
+#         parser.add_argument('results', type=int, default=20)
+#         parser.add_argument('startIndex', type=int, default=0)
+#         args = parser.parse_args()
+#         getTopWords(args['sortMethod'], args['results'], args['startIndex'])
 
 api.add_resource(GetWordData, '/getWord/<word>')
+
+nltk.download('wordnet')
 
 if __name__ == '__main__':
     app.run()

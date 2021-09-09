@@ -5,3 +5,4 @@ requests
 Flask-CORS
 psycopg
 psycopg2-binary
+nltk
