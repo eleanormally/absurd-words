@@ -11,7 +11,7 @@ A system and website to score the absurdity and uselessness of words in English,
     - If false will only use records within database
   - Example Use: `/getWord/absurd`
 
-- ### `/topWords`
+- ### `/words`
   - Paramters
     - `results`
       - integer up to 50, number of results to return

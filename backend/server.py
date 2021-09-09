@@ -195,6 +195,7 @@ class TopWords(Resource):
 
 
 api.add_resource(GetWordData, '/getWord/<word>')
+api.add_resource(TopWords, '/words')
 
 nltk.download('wordnet')
 
