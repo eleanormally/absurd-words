@@ -127,7 +127,7 @@ class GetWordData(Resource):
         elif args['calculate']:
             synsets = wn.synsets(word)
             if len(synsets) == 0:
-                return '{{error: word not found}'
+                return '{error: word not found}'
             calculatedData = calculateWordScore(word)
             addWordToDatabase(calculatedData)
             return calculatedData
@@ -135,37 +135,64 @@ class GetWordData(Resource):
         else:
             return '{message: "not in database"}'
 
-# def getTopWords(method, rNum, index):
-#   conn = None
+def getTopWords(method, rNum, offset):
+  conn = None
 
-#     try:
-#         conn = psycopg2.connect(
-#             os.environ['DATABASE_URL'],
-#             sslmode='require'
-#         )
-#         cur = conn.cursor()
+  switcher = {
+    'score': 'score',
+    'scoreInverse': 'score desc',
+    'a-z': 'word',
+    'z-a': 'word desc',
+    'humour': 'humour',
+    'humourInverse': 'humour desc',
+    'util': 'utilization'
+    'utilInverse': 'utilization desc'
+  }
+  sort = switcher.get(method, 'invalid')
+  if sort == 'invalid':
+    return 'invalid'
 
-#         cur.execute(
-#           'SELECT * FROM words WHERE word = \'{}\''.format(word)
-#         )
+    try:
+        conn = psycopg2.connect(
+            os.environ['DATABASE_URL'],
+            sslmode='require'
+        )
+        cur = conn.cursor()
 
-#         return cur.fetchone()
+        cur.execute(
+          'SELECT * FROM public.words ORDER BY %s OFFSET %s LIMIT %s'.format(sort, offset, rNum)
+        )
 
-#     except (Exception, psycopg2.DatabaseError) as error:
-#         print(error)
+        return cur.fetchall()
 
-#     finally:
-#         if conn is not None:
-#             conn.close()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
 
-# class TopWords(Resource):
-#     def get(self):
-#         parser = reqparse.RequestParser()
-#         parser.add_argument('sortMethod', type=str, default='score')
-#         parser.add_argument('results', type=int, default=20)
-#         parser.add_argument('startIndex', type=int, default=0)
-#         args = parser.parse_args()
-#         getTopWords(args['sortMethod'], args['results'], args['startIndex'])
+    finally:
+        if conn is not None:
+            conn.close()
+
+class TopWords(Resource):
+    def get(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('sortMethod', type=str, default='score')
+        parser.add_argument('results', type=int, default=20)
+        parser.add_argument('startIndex', type=int, default=0)
+        args = parser.parse_args()
+        unparsed = getTopWords(args['sortMethod'], args['results'], args['startIndex'])
+        parsed = [
+          {
+            'word': result[0],
+            'score': result[1],
+            'humour': result[2],
+            'ambiguity': result[3],
+            'relatives': result[4],
+            'utilization': result[5]
+          }
+          for result in unparsed
+        ]
+        return {'status: success', 'results': parsed}
+
 
 api.add_resource(GetWordData, '/getWord/<word>')
 

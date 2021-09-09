@@ -25,6 +25,10 @@ A system and website to score the absurdity and uselessness of words in English,
         - `scoreInverse`
         - `a-z`
         - `z-a`
+        - `humour`
+        - `humourInverse`
+        - `util`
+        - `utilInverse`
       - default `score`
 
 
