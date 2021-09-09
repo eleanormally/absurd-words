@@ -191,7 +191,7 @@ class TopWords(Resource):
           }
           for result in unparsed
         ]
-        return {'status: success', 'results': parsed}
+        return {'status': success, 'results': parsed}
 
 
 api.add_resource(GetWordData, '/getWord/<word>')
