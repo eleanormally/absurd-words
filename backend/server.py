@@ -180,17 +180,7 @@ class TopWords(Resource):
         parser.add_argument('startIndex', type=int, default=0)
         args = parser.parse_args()
         unparsed = getTopWords(args['sortMethod'], args['results'], args['startIndex'])
-        parsed = [
-          {
-            'word': result[0],
-            'score': result[1],
-            'humour': result[2],
-            'ambiguity': result[3],
-            'relatives': result[4],
-            'utilization': result[5]
-          }
-          for result in unparsed
-        ]
+        parsed = [{ 'word': result[0], 'score': result[1], 'humour': result[2], 'ambiguity': result[3], 'relatives': result[4], 'utilization': result[5] }for result in unparsed ]
         return {'status': success, 'results': parsed}
 
 
