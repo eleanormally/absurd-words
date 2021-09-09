@@ -56,12 +56,10 @@ def calculateWordScore(word):
     return {
       'word': word,
       'score': score,
-      'datapoints': {
-        'humour': h,
-        'ambiguity': q,
-        'relatives': a,
-        'utlilization': u
-      }
+      'humour': h,
+      'ambiguity': q,
+      'relatives': a,
+      'utilization': u
     }
 
 
@@ -76,7 +74,7 @@ def addWordToDatabase(data):
         cur = conn.cursor()
 
 
-        cur.execute('INSERT INTO words (word, score, datapoints) VALUES(%s, %s, %s)', (data['word'], data['score'], json.dumps(data['datapoints'])))
+        cur.execute('INSERT INTO words (word, score, humour, ambiguity, relatives, utilization) VALUES(%s, %s, %s, %s, %s, %s)', (data['word'], data['score'], data['humour'], data['ambiguity'], data['relatives'], data['utilization']))
         conn.commit()
 
     except (Exception, psycopg2.DatabaseError) as error:
@@ -120,7 +118,10 @@ class GetWordData(Resource):
           return {
             'word': word,
             'score': valInDatabase[1],
-            'datapoints': valInDatabase[2]
+            'humour': valInDatabase[2],
+            'ambiguity': valInDatabase[3],
+            'relatives': valInDatabase[4],
+            'utilization': valInDatabase[5]
           }
 
         elif args['calculate']:
