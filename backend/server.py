@@ -127,7 +127,7 @@ class GetWordData(Resource):
         elif args['calculate']:
             synsets = wn.synsets(word)
             if len(synsets) == 0:
-                return '{error: word not found}'
+                return '{error: word not found in Wordnet}'
             calculatedData = calculateWordScore(word)
             addWordToDatabase(calculatedData)
             return calculatedData
@@ -151,22 +151,20 @@ def getTopWords(method, rNum, offset):
   sort = switcher.get(method, 'invalid')
   if sort == 'invalid':
     return 'invalid'
-
-    try:
+  else: 
+    try: 
         conn = psycopg2.connect(
             os.environ['DATABASE_URL'],
             sslmode='require'
         )
         cur = conn.cursor()
-
         cur.execute(
-          'SELECT * FROM public.words ORDER BY %s OFFSET %s LIMIT %s'.format(sort, offset, rNum)
+          'SELECT * FROM public.words ORDER BY {} OFFSET {} LIMIT {}'.format(sort, offset, rNum)
         )
-
         return cur.fetchall()
 
     except (Exception, psycopg2.DatabaseError) as error:
-        print(error)
+        return error
 
     finally:
         if conn is not None:
@@ -181,7 +179,7 @@ class TopWords(Resource):
         args = parser.parse_args()
         unparsed = getTopWords(args['sortMethod'], args['results'], args['startIndex'])
         parsed = [{ 'word': result[0], 'score': result[1], 'humour': result[2], 'ambiguity': result[3], 'relatives': result[4], 'utilization': result[5] }for result in unparsed ]
-        return {'status': success, 'results': parsed}
+        return {'status': 'success', 'results': parsed}
 
 
 api.add_resource(GetWordData, '/getWord/<word>')
