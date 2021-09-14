@@ -5,20 +5,60 @@
 	<title>
 		Absurd Words
 	</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="database.js"></script>
+	<link rel="stylesheet" href="index.css">
+</head>
 
-	<body>
-		<h1 class="mainHeader">
+<body>
+	<div class="header">
+		<a href="/index.html" style="float:left">
+		<h1 class="mainText">
 			Absurd Words Index
 		</h1>
-		<p class="descriptor">
-			A website dedicated to displaying the incredible levels of absurdity in the english language
-		</p>
-
-    
-
-		<div class="footer">
-			<p>Created By Kiernan Olson, inspired by The University of Chicago Uncommon Essay Prompt</p>
+		</a>
+		<div class="header-right">
+			<a href="/about.html">
+			<h1 class="headerText">
+				About
+			</h1>
+			</a>
 		</div>
 
+	</div>
+
+	<div class="fullWrapper">
+		<div class="searchWrapper">
+			<input class="searchBox" type="text" placeholder="Search..."></input>
+			<label for="logScore">View Log Adjusted Scores</label>
+			<div class="switchWrapper">
+				<label class="logScoreSwitch">
+					<input type="checkbox" id="logScore">
+					<span class="slider"></span>
+				</label>
+			</div>
+		</div>
+		<div class="wordViewer">
+			<div class="wordTableWrapper">
+				<table class="wordTable" id="wordTable">
+						<thead class="wordTableHead">
+							<tr class="wordTableHeaderRow">
+								<th>Word</th>
+								<th>Score</th>
+								<th>Humour</th>
+								<th>Word Ambiguity</th>
+								<th>Relatives</th>
+							</tr>
+						</thead>
+					<tbody class="wordTableBody"></tbody>
+				</table>
+			</div>
+		</div>
+		<button class="showTable" hidden onclick="showTable()">Return To Full Word List</button>
+	</div>
+
+	<footer>
+		<p>Created By Kiernan Olson, inspired by The University of Chicago Uncommon Essay Prompt</p>
+	</footer>
 </body>
 </html>
