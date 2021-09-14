@@ -1,0 +1,224 @@
+html, body {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #2196F3;
+}
+
+a {
+    color: inherit;
+    text-decoration: inherit;
+}
+
+.mainText {
+    color: #fff;
+    padding-left: 20px;
+}
+
+.headerText {
+    color: #fff;
+    padding-left: 20px;
+}
+
+.header-right {
+    float: right;
+    padding-right: 20px;
+}
+
+@media screen and (max-width: 500px) {
+    .header a {
+      float: none;
+      display: block;
+      text-align: left;
+    }
+    .header-right {
+      float: none;
+    }
+  }
+
+.searchWrapper {
+    display: flex;
+    margin: auto;
+    width: 75%;
+    padding-top: 50px;
+}
+
+.searchBox {
+    border: 0px;
+    border-radius: 5px;
+    height: 20px;
+    padding: 2px 23px 2px 30px;
+    outline: 0;
+    background-color: #fff;
+    font-size: 18px;    
+    font-family: Verdana;
+    font-weight: bold;
+    Color: #707070;
+  }
+
+::placeholder {
+    font-size: 18px;    
+    font-family: Verdana;
+    font-weight: bold;
+}
+
+label {
+    font-size: 18px;
+    font-weight: bold;
+    color: #707070;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.wordTableWrapper {
+    width: 100%;
+    background: #fff;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 33px 30px;
+    padding-top: 10px;
+}
+
+th {
+    font-size: 18px;
+    color: #fff;
+    background-color: #6c7ae0;
+    padding: 10px;
+    padding-left: 15px;
+    border: 1px solid #6c7ae0;
+    text-align: left;
+}
+
+td {
+    padding: 10px;
+    padding-left: 15px;
+    font-size: 17px;
+    color: #808080;
+    line-height: 1.4;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+td:hover {
+    background-color: #ccc;
+    border-radius: 15px;
+
+}
+
+
+.wordTable {
+    width: 80%;
+    border-radius: 10px;
+    overflow: hidden;
+    border-collapse: collapse;
+    border-width: 0px;
+    box-shadow: 0 0px 40px 0px rgba(0, 0, 0, 0.15);
+    -moz-box-shadow: 0 0px 40px 0px rgba(0, 0, 0, 0.15);
+    -webkit-box-shadow: 0 0px 40px 0px rgba(0, 0, 0, 0.15);
+    -o-box-shadow: 0 0px 40px 0px rgba(0, 0, 0, 0.15);
+    -ms-box-shadow: 0 0px 40px 0px rgba(0, 0, 0, 0.15);
+}
+
+.logScoreSwitch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.logScoreSwitch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  
+}
+
+.switchWrapper {
+    padding-left: 8px;
+    margin-top: -5px;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+  
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+
+.showTable {
+    margin-left: 15%;
+    font-family: Verdana;
+    font-size: 20px;
+    font-weight: bold;
+    color: #707070;
+    border-radius: 25px;
+    padding: 10px;
+    border: 0px;
+    text-align:center;
+    background-color: #ccc;
+    transition: all 0.2s;
+}
+
+.showTable:hover {
+    background-color: rgb(179, 179, 179);
+    
+}
+
+footer {
+    padding: 20px;
+    font-size: 18px;
+    font-family: Verdana;
+    font-weight: Bold;
+    color: #808080;
+}
