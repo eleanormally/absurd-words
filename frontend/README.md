@@ -1,1 +1,1 @@
-# Absurd Words Database Viewer
+# Absurd Words Website
