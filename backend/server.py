@@ -127,13 +127,13 @@ class GetWordData(Resource):
         elif args['calculate']:
             synsets = wn.synsets(word)
             if len(synsets) == 0:
-                return '{"error": "word not found in Wordnet"}'
+                return {"error": "word not found in Wordnet"}
             calculatedData = calculateWordScore(word)
             addWordToDatabase(calculatedData)
             return calculatedData
 
         else:
-            return '{"message": "not in database"}'
+            return {"message": "not in database"}
 
 def getTopWords(method, rNum, offset):
   conn = None
