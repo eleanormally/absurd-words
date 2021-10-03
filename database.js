@@ -1,7 +1,7 @@
 APIURI = "https://absurdwordsbackend.herokuapp.com/";
 
 $(document).ready(function() {
-    
+
     getBaseTable();
 
     $("#logScore").change(function(){
@@ -23,15 +23,14 @@ $(document).ready(function() {
             search($(this).val());
         }
     });
-    
+
 });
 
 function search(word) {
     $.get(APIURI + "/getWord/" + word.toLowerCase() + "?calculate=true", function(data){
         if (data.hasOwnProperty("word")) {
             if($(".showTable").is(":hidden")) {
-                console.log('test');
-                $("#wordTable > tbody").empty();  
+                $("#wordTable > tbody").empty();
             }
             row = $(".wordTableBody").append("<tr class=\"wordRow\"></tr>");
             row.append([
@@ -41,13 +40,18 @@ function search(word) {
                 $("<td>").html(data['ambiguity']),
                 $("<td>").html(data['relatives'])
             ]);
+            $(".showTable").show();
         }
-        $(".showTable").show();
+        else if (data.hasOwnProperty("error")) {
+            alert("Word not found in WordNet.");
+        }
+
     }
     );
 }
 
 function getBaseTable() {
+    $("#wordTable > tbody").empty();
     $.get(APIURI + "/words?sortMethod=scoreInverse", function(data){
         words = data["results"];
         words.forEach((word) => {
