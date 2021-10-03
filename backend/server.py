@@ -15,7 +15,7 @@ CORS(app)
 
 
 def calculateWordScore(word):
-    
+
     #Phonemic Humour
     h = 0
     with open('letter_freq.json', 'r') as file:
@@ -37,7 +37,7 @@ def calculateWordScore(word):
     q = 0
     for syn in synsets:
       q += len(syn.lemmas())
-    
+
     #Related Word Abundance
 
     h1 = 0
@@ -47,7 +47,7 @@ def calculateWordScore(word):
       h1 += len(hyponyms)
       for nym in hyponyms:
         h2 += len(nym.hyponyms())
-    
+
     a = math.log(1+h1) + 0.5*math.log(1+h2)
 
 
@@ -127,13 +127,13 @@ class GetWordData(Resource):
         elif args['calculate']:
             synsets = wn.synsets(word)
             if len(synsets) == 0:
-                return '{error: word not found in Wordnet}'
+                return '{"error": "word not found in Wordnet"}'
             calculatedData = calculateWordScore(word)
             addWordToDatabase(calculatedData)
             return calculatedData
 
         else:
-            return '{message: "not in database"}'
+            return '{"message": "not in database"}'
 
 def getTopWords(method, rNum, offset):
   conn = None
@@ -151,8 +151,8 @@ def getTopWords(method, rNum, offset):
   sort = switcher.get(method, 'invalid')
   if sort == 'invalid':
     return 'invalid'
-  else: 
-    try: 
+  else:
+    try:
         conn = psycopg2.connect(
             os.environ['DATABASE_URL'],
             sslmode='require'

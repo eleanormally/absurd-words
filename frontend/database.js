@@ -30,7 +30,6 @@ function search(word) {
     $.get(APIURI + "/getWord/" + word.toLowerCase() + "?calculate=true", function(data){
         if (data.hasOwnProperty("word")) {
             if($(".showTable").is(":hidden")) {
-                console.log('test');
                 $("#wordTable > tbody").empty();  
             }
             row = $(".wordTableBody").append("<tr class=\"wordRow\"></tr>");
@@ -42,12 +41,16 @@ function search(word) {
                 $("<td>").html(data['relatives'])
             ]);
         }
+        else if (data.hasOwnProperty("error")) {
+            alert("Word not found in WordNet.");
+        }
         $(".showTable").show();
     }
     );
 }
 
 function getBaseTable() {
+    $("#wordTable > tbody").empty();
     $.get(APIURI + "/words?sortMethod=scoreInverse", function(data){
         words = data["results"];
         words.forEach((word) => {
