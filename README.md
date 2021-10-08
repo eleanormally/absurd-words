@@ -66,7 +66,7 @@ Represented as `q` in equation.
 
 Relative word abundance suggests a more important word, so the Synset of a given word has its 2 layers of its hyponyms counted as given by Wordnet (Ref. #4). A large number of hyponyms suggests that its meaning is applicable to many other words, increasing its importance and decreasing its absurdity.
 
-<img src="log(1+h_1)+\frac{1}{2}log(1+h_2)"> <br>
+<img src="http://latex2png.com/pngs/3afbfad54504d7f31d88a7ecf5de5b97.png"> <br>
 Where `h1` is the number of single edge related hyponyms, and `h2` is the number of double edge related hyponyms.
 
 
