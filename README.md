@@ -37,12 +37,12 @@ A system and website to score the absurdity and uselessness of words in English,
 # Scoring System
 
 Simplified Equation: <br>
-&emsp; <img src="https://latex.codecogs.com/gif.latex?u*%281&plus;%5Cfrac%7B-h&plus;q&plus;%5Cfrac%7Ba%7D%7B2%7D%7D%7B100%7D%29">
+&emsp; <img src="http://latex2png.com/pngs/c4bd5f3deecdc8af0caa443f4d0627cc.png">
 <br>
 &emsp; where `h` is the phonemic humour value, `q` is the ambiguity value, `a` is the calculated abundance, and `u` is the word utilization.
 
 Full Equation:<br><br>
-<img src="https://latex.codecogs.com/gif.latex?-log%28%5Cfrac%7B%5Csum%20f_i%7D%7By%7D%20%29*%281&plus;%5Cfrac%7B%5Cfrac%7B%5Csum%20p_i*log_2%28p_i%29%7D%7Bl%7D&plus;q&plus;%20%5Cfrac%7Blog%281&plus;h_1%29%20&plus;%20%5Cfrac%7B1%7D%7B2%7Dlog%281&plus;h_2%29%7D%7B2%7D%20%7D%7B100%7D%29">
+<img src="http://latex2png.com/pngs/a7e3e6e731285563ba0ba1646b1b1cee.png">
 
 ## Phonemic Humour
 
