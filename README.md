@@ -36,25 +36,20 @@ A system and website to score the absurdity and uselessness of words in English,
 
 # Scoring System
 
-Simplified Equation: <br>
-&emsp; <img src="http://latex2png.com/pngs/b901e6f8d8c842adc50155376ff51146.png">
-<br>
-&emsp; where `h` is the phonemic humour value, `q` is the ambiguity value, `a` is the calculated abundance, and `u` is the word utilization.
-
 Full Equation:<br><br>
-<img src="http://latex2png.com/pngs/a7e3e6e731285563ba0ba1646b1b1cee.png">
+<img src="latex images/full.png">
 
 ## Phonemic Humour
 
 Phonemic humour is calculated as described in Reference #1, calculating Shannon entropy for unigram letter frequency. To acquire letter frequency I am using the top 100000 most frequently used words in english according to Rachael Tatman's analysis of the Google Web Trillion Word Corpus (Ref. #2)
 
-&emsp; <img src="http://latex2png.com/pngs/8ab8e7d2fca87995a1bada1974c6caae.png"><br>
+&emsp; <img src="latex images/humour.png"><br>
 where `pi` is the probablility of a letter being present in a word and l is the number of letters in the word.
 ## Word Utilization
 
 Word utilization is calculated using Google NGram Viewer (Ref. #3), and is based average frequency from 1990 (or as recent as the word has been observed) to 2019. This is to adjust for inflated word frequency that can appear through trends which are even more prevalent with the internet.
 
-&emsp; <img src="http://latex2png.com/pngs/8bbe575c6421101365179f396009d94d.png">
+&emsp; <img src="latex images/frequency.png">
 <br> &emsp; where `f` is the set of word frequencies for each year, and `y` is the total number of years.
 ## Word Ambiguity
 
@@ -66,7 +61,7 @@ Represented as `q` in equation.
 
 Relative word abundance suggests a more important word, so the Synset of a given word has its 2 layers of its hyponyms counted as given by Wordnet (Ref. #4). A large number of hyponyms suggests that its meaning is applicable to many other words, increasing its importance and decreasing its absurdity.
 
-<img src="http://latex2png.com/pngs/3afbfad54504d7f31d88a7ecf5de5b97.png"> <br>
+<img src="latex images/ambiguity.png"> <br>
 Where `h1` is the number of single edge related hyponyms, and `h2` is the number of double edge related hyponyms.
 
 
